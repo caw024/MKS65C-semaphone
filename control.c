@@ -39,12 +39,19 @@ int main(int argc, char * argv[]) {
       r = semctl(semd, 0, SETVAL, us);
       printf("semctl returned: %d\n", r);
     }
-    
+
   }
 
   //view
   if (strcmp(argv[0],"-v") == 0){
-    
+    int fd = open("file.txt", O_RDONLY | O_CREAT);
+    char * r = calloc(sizeof(char),100);
+    int red = read(fd,r,100);
+    printf("\nDid it read? %d",red);
+
+    printf("Story: %s\n", r);
+    close(fd);
+
   }
 
   //remove
