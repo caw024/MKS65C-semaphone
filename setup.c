@@ -47,7 +47,7 @@ void rem() {
     printf("Semaphore Error %d: %s\n", errno, strerror(errno));
   }
   if( semctl(semid, 0, IPC_RMID, 0) == -1){
-    printf("Error %d: %s\n", strerror(errno));
+    printf("Error: %s\n", strerror(errno));
   }
   int f = fork();
   if(!f){
