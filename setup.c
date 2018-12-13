@@ -51,17 +51,16 @@ void rem() {
   }
   int f = fork();
   if(!f){
-    char** command;
+    char* command[2];
     command[0] = "cat";
     command[1] = "file.txt";
-    printf("HI\n");
     if(execvp(command[0], command) == -1){
       printf("Error %d: %s\n", errno, strerror(errno));
     }
   }else{
     int status;
     wait(&status);
-    char** command;
+    char* command[2];
     command[0] = "rm";
     command[1] = "file.txt";
     if(execvp(command[0], command) == -1){
