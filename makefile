@@ -9,4 +9,4 @@ run:
 	./main.out
 
 clean:
-	rm -rf a.out
+	rm -rf a.out main.out

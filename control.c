@@ -26,6 +26,15 @@ int main(int argc, char * argv[]) {
     printf("error %d: %s\n", errno, strerror(errno));
     exit(0);
   }
+
+  struct sembuf sb;
+  //if sem != 0, wait, else s--
+  sb.sem_up = -1;
+  sb.sem_num = 0;
+  sb.sem_flag = SEM_UNDO;
+  
+  semop(semid,&sb,1);
+
   int val = semctl(semid, 0, GETVAL, 0);
   if( val == 1 ){
     printf("The game is currently being played by another user. Please wait your turn\n");
@@ -59,6 +68,7 @@ int main(int argc, char * argv[]) {
   }
   fclose(fp);
 
+ 
   printf("\nEnter the next line for the story\n");
   char* sentence = calloc(*data, sizeof(char));
   scanf("%[^\n]", sentence);
@@ -68,8 +78,10 @@ int main(int argc, char * argv[]) {
   int y = open("file.txt", O_WRONLY | O_APPEND, 0666);
   write(y, sentence, *data);
   close(y);
+  close(sentence);
 
   us.val = 0;
   semctl(semid, 0, SETVAL, us);
+  sb.sem_up = 1;
   return 0;
 }
