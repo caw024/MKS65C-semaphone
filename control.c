@@ -47,11 +47,10 @@ int main(int argc, char * argv[]) {
   int c;
   while(1){
     c = fgetc(fp);
-    if( feof(fp) ){
+    if( feof(fp) || c == 10 ){
       break;
     }
     printf("%c", c);
-    printf("%d", c);
   }
   fclose(fp);
 
