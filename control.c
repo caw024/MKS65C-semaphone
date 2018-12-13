@@ -44,11 +44,9 @@ int main(int argc, char * argv[]) {
   }
   char* sentence = calloc(*data, sizeof(char));
   fseek(fp, *data * -1, SEEK_END);
-  int c;
-  char* temp;
+  char temp;
   while(!(feof(fp))){
-    c = fgetc(fp);
-    temp = (unsigned char)c
+    temp = (char)fgetc(fp);
     strcat(sentence, temp);
   }
   fclose(fp);
