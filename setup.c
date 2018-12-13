@@ -54,13 +54,13 @@ void rem() {
     char** command;
     command[0] = "cat";
     command[1] = "file.txt";
+    printf("HI\n");
     if(execvp(command[0], command) == -1){
       printf("Error %d: %s\n", errno, strerror(errno));
     }
   }else{
     int status;
     wait(&status);
-    printf("HI\n");
     char** command;
     command[0] = "rm";
     command[1] = "file.txt";
