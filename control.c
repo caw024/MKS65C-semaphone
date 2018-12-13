@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
 #include <sys/types.h>
@@ -36,11 +37,16 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
 
+  struct stat st;
+  stat(filename, &st);
+  int size = st.st_size;
   int y = open("file.txt", O_RDONLY);
   if( y == -1 ){
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
+  char* temp;
+  read(y, sentence, *data - size);
   char* sentence = calloc(*data, sizeof(char));
   if( read(y, sentence, *data) == -1){
     printf("Error, %s\n", strerror(errno));
