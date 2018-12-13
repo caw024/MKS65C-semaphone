@@ -70,7 +70,7 @@ int main(int argc, char * argv[]) {
   write(y, sentence, *data);
   close(y);
 
-  us.val = -1;
+  us.val = 0;
   semctl(semid, 0, SETVAL, us);
   return 0;
 }
