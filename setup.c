@@ -47,7 +47,7 @@ void rem() {
     printf("Semaphore Error %d: %s\n", errno, strerror(errno));
   }
   if( semctl(semid, 0, IPC_RMID, 0) == -1){
-    printf("Error %d: %s\n", errno, strerror(errno));
+    printf("Error %d: %s\n", strerror(errno));
   }
   int f = fork();
   if(!f){
@@ -55,7 +55,7 @@ void rem() {
     command[0] = "cat";
     command[1] = "file.txt";
     if(execvp(command[0], command) == -1){
-      printf("Semaphore Error: %s\n", errno, strerror(errno));
+      printf("Semaphore Error: %s\n", strerror(errno));
     }
   }else{
     int status;
@@ -64,7 +64,7 @@ void rem() {
     command[0] = "rm";
     command[1] = "file.txt";
     if(execvp(command[0], command) == -1){
-      printf("Error: %s\n", errno, strerror(errno));
+      printf("Error: %s\n", strerror(errno));
     }
   }
 }
@@ -74,7 +74,7 @@ void view() {
   command[0] = "cat";
   command[1] = "file.txt";
   if(execvp(command[0], command) == -1){
-    printf("Error %d: %s\n", errno, strerror(errno));
+    printf("Error: %s\n", strerror(errno));
   }
 }
 
