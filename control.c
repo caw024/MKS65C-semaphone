@@ -29,7 +29,7 @@ int main(int argc, char * argv[]) {
   int val = semctl(semid, 0, GETVAL, 0);
   if( val == 1 ){
     printf("The game is currently being played by another user. Please wait your turn\n");
-    while( val1 = semctl(semid, 0, GETVAL, 0) );
+    while( val = semctl(semid, 0, GETVAL, 0) );
   }
   union semun us;
   us.val = 1;
