@@ -44,10 +44,10 @@ int main(int argc, char * argv[]) {
   }
   char* sentence = calloc(*data, sizeof(char));
   fseek(fp, *data * -1, SEEK_END);
-  char c[1];
+  int c;
   while(!(feof(fp))){
-    strcpy(c, fgetc(fp));
-    strcat(sentence, c);
+    c = fgetc(fp);
+    strcat(sentence, (unsigned char)c);
   }
   fclose(fp);
 
