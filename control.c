@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
 #include <sys/types.h>
+#include <sys/shm.h>
 #include <errno.h>
-
 //Control
 
-#define KEY 0xDEADBEEF
+#define KEY 0xBEEFDEAD
 
  union semun {
    int              val;    /* Value for SETVAL */
@@ -18,45 +20,44 @@
  };
 
 int main(int argc, char * argv[]) {
+  int semid = semget(KEY, 1, IPC_CREAT | IPC_EXCL | 0644);
+  if (semd == -1) {
+    printf("error %d: %s\n", errno, strerror(errno));
+    exit(0);
+  }
+  union semun us;
+  us.val = 0;
+  semctl(semid, 0, SETVAL, us);
 
-  //create
-  if (strcmp(argv[0],"-c") == 0){
-
-    //Mr. K's code
-    int semd;
-    int r;
-    int v;
-    semd = semget(KEY, 1, IPC_CREAT | IPC_EXCL | 0644);
-    if (semd == -1) {
-      printf("error %d: %s\n", errno, strerror(errno));
-      semd = semget(KEY, 1, 0);
-      v = semctl(semd, 0, GETVAL, 0);
-      printf("semctl returned: %d\n", v);
-    }
-    else {
-      union semun us;
-      us.val = 3;
-      r = semctl(semd, 0, SETVAL, us);
-      printf("semctl returned: %d\n", r);
-    }
-
+  int shmid = shmget(123456, 4, 0666);
+  int* data = shmat(shmid, 0, 0);
+  if( *data == -1 ){
+    printf("Error, %s\n", strerror(errno));
+    exit(0);
   }
 
-  //view
-  if (strcmp(argv[0],"-v") == 0){
-    int fd = open("file.txt", O_RDONLY | O_CREAT);
-    char * r = calloc(sizeof(char),100);
-    int red = read(fd,r,100);
-    printf("\nDid it read? %d",red);
-
-    printf("Story: %s\n", r);
-    close(fd);
-
+  int y = open("file.txt", O_RDONLY);
+  if( y == -1 ){
+    printf("Error, %s\n", strerror(errno));
+    exit(0);
   }
+  char* sentence;
+  if( read(y, sentence, *data) == -1){
+    printf("Error, %s\n", strerror(errno));
+    exit(0);
+  }
+  close(y);
 
-  //remove
-  if (strcmp(argv[0],"-r") == 0){}
+  printf("Last line in story: %s\n", sentence);
+  printf("Enter the next line for the story\n");
+  scanf("%[^\n]", sentence);
 
-    
-    return 0;
+  *data = strlen(sentence);
+  y = open("file.txt", O_WRONLY | O_APPEND, 0666);
+  write(y, sentence, *data);
+  close(y);
+
+  us.val = 1;
+  semctl(semid, 0, SETVAL, us);
+  return 0;
 }
