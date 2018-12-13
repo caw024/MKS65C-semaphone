@@ -7,6 +7,8 @@
 #include <sys/sem.h>
 #include <sys/types.h>
 #include <sys/shm.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
 #include <errno.h>
 
 #define KEY 0xBEEFDEAD
@@ -36,7 +38,7 @@ void create() {
 }
 
 void rem() {
-  int shmid = shmget(123456, 4, IPC_CREAT | 0666);
+  int shmid = shmget(123456, 4, 0666);
   if( shmctl(shmid, IPC_RMID, NULL) == -1 ){
     printf("Error, %s\n", strerror(errno));
   }
