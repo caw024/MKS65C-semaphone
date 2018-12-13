@@ -2,14 +2,18 @@ all:  control.c setup.c
 	gcc -o main.out control.c
 	gcc setup.c
 
-setup -c: setup.c
-	./a.out -c
+	ifeq (setup,$(firstword $(MAKECMDGOALS)))
+	  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+	  $(eval $(RUN_ARGS):;@:)
+	endif
 
-setup -r: setup.c
-	./a.out -r
 
-setup -v: setup.c
-	./a.out -v
+setup: setup.c
+	./a.out
+
+.PHONY: setup
+	run : setup
+	@echo setup $(RUN_ARGS)	
 
 run:
 	./main.out
