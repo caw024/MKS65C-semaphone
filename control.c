@@ -21,7 +21,7 @@
 
 int main(int argc, char * argv[]) {
   int semid = semget(KEY, 1, IPC_CREAT | IPC_EXCL | 0644);
-  if (semd == -1) {
+  if (semid == -1) {
     printf("error %d: %s\n", errno, strerror(errno));
     exit(0);
   }
