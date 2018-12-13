@@ -42,17 +42,15 @@ int main(int argc, char * argv[]) {
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
-  char* sentence = calloc(*data, sizeof(char));
+  printf("Last line in story: ");
   fseek(fp, *data * -1, SEEK_END);
-  char temp;
   while(!(feof(fp))){
-    temp = (char)fgetc(fp);
-    strcat(sentence, temp);
+    printf("%c\n", fgetc(fp));
   }
   fclose(fp);
 
-  printf("Last line in story: %s\n", sentence);
   printf("Enter the next line for the story\n");
+  char* sentence = calloc(*data, sizeof(char));
   scanf("%[^\n]", sentence);
 
   *data = strlen(sentence);
