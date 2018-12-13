@@ -51,6 +51,7 @@ int main(int argc, char * argv[]) {
       break;
     }
     printf("%c", c);
+    printf("%d", c);
   }
   fclose(fp);
 
