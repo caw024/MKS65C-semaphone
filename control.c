@@ -44,8 +44,13 @@ int main(int argc, char * argv[]) {
   }
   printf("Last line in story: ");
   fseek(fp, *data * -1, SEEK_END);
-  while(!(feof(fp))){
-    printf("%c", fgetc(fp));
+  int c;
+  while(1){
+    c = fgetc(fp);
+    if( feof(fp) ){
+      break;
+    }
+    printf("%c", c);
   }
   fclose(fp);
 
