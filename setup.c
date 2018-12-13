@@ -44,25 +44,27 @@ void rem() {
   }
   int semid = semget(KEY, 1, 0666);
   if( semid == -1 ){
-    printf("Semaphore Error %d: %s\n", errno, strerror(errno));
+    printf("Error: %s\n", strerror(errno));
   }
   if( semctl(semid, 0, IPC_RMID, 0) == -1){
-    printf("Semaphore Error: %s\n", strerror(errno));
+    printf("Error: %s\n", strerror(errno));
   }
   int f = fork();
   if(!f){
-    char* command[2];
+    char* command[3];
     command[0] = "cat";
     command[1] = "file.txt";
+    command[2] = NULL;
     if(execvp(command[0], command) == -1){
       printf("Error: %s\n", strerror(errno));
     }
   }else{
     int status;
     wait(&status);
-    char* command[2];
+    char* command[3];
     command[0] = "rm";
     command[1] = "file.txt";
+    command[2] = NULL;
     if(execvp(command[0], command) == -1){
       printf("Error: %s\n", strerror(errno));
     }
@@ -70,9 +72,10 @@ void rem() {
 }
 
 void view() {
-  char* command[2];
+  char* command[3];
   command[0] = "cat";
   command[1] = "file.txt";
+  command[2] = NULL;
   if(execvp(command[0], command) == -1){
     printf("Error: %s\n", strerror(errno));
   }
