@@ -60,6 +60,7 @@ void rem() {
   }else{
     int status;
     wait(&status);
+    printf("HI\n");
     char** command;
     command[0] = "rm";
     command[1] = "file.txt";
