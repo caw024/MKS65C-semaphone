@@ -37,29 +37,26 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
 
-  struct stat st;
-  stat("file.txt", &st);
-  int size = st.st_size;
-  int y = open("file.txt", O_RDONLY);
-  if( y == -1 ){
+  FILE *fp = fopen("file.txt", "r");
+  if(!fp){
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
-  char* temp;
-  read(y, temp, *data - size);
   char* sentence = calloc(*data, sizeof(char));
-  if( read(y, sentence, *data) == -1){
-    printf("Error, %s\n", strerror(errno));
-    exit(0);
+  fseek(fp, *data * -1, SEEK_END);
+  char c[1];
+  while(!(feof(fp))){
+    strcpy(c, fgetc(fp));
+    strcat(sentence, c);
   }
-  close(y);
+  fclose(fp);
 
   printf("Last line in story: %s\n", sentence);
   printf("Enter the next line for the story\n");
   scanf("%[^\n]", sentence);
 
   *data = strlen(sentence);
-  y = open("file.txt", O_WRONLY | O_APPEND, 0666);
+  int y = open("file.txt", O_WRONLY | O_APPEND, 0666);
   write(y, sentence, *data);
   close(y);
 
