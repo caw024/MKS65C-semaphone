@@ -57,6 +57,7 @@ int main(int argc, char * argv[]) {
   printf("\nEnter the next line for the story\n");
   char* sentence = calloc(*data, sizeof(char));
   scanf("%[^\n]", sentence);
+  strcat(sentence, "\n");
 
   *data = strlen(sentence);
   int y = open("file.txt", O_WRONLY | O_APPEND, 0666);
