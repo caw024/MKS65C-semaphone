@@ -27,6 +27,7 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
   int val = semctl(semid, 0, GETVAL, 0);
+  printf("%d\n", val);
   if( val == 1 ){
     printf("The game is currently being played by another user. Please wait your turn\n");
     while( val = semctl(semid, 0, GETVAL, 0) );
