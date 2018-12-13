@@ -27,7 +27,7 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
   union semun us;
-  us.val = 0;
+  us.val = 1;
   semctl(semid, 0, SETVAL, us);
 
   int shmid = shmget(123456, 4, 0666);
@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
   write(y, sentence, *data);
   close(y);
 
-  us.val = 1;
+  us.val = -1;
   semctl(semid, 0, SETVAL, us);
   return 0;
 }
