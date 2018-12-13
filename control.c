@@ -20,7 +20,7 @@
  };
 
 int main(int argc, char * argv[]) {
-  int semid = semget(KEY, 1, 0);
+  int semid = semget(KEY, 1, 0644);
   if (semid == -1) {
     printf("error %d: %s\n", errno, strerror(errno));
     exit(0);
@@ -41,7 +41,7 @@ int main(int argc, char * argv[]) {
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
-  char* sentence;
+  char* sentence = calloc(*data, sizeof(char));
   if( read(y, sentence, *data) == -1){
     printf("Error, %s\n", strerror(errno));
     exit(0);
