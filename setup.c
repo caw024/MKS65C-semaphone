@@ -70,7 +70,7 @@ void rem() {
 }
 
 void view() {
-  char** command;
+  char* command[2];
   command[0] = "cat";
   command[1] = "file.txt";
   if(execvp(command[0], command) == -1){
