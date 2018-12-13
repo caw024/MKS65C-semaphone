@@ -7,3 +7,6 @@ setup: a.out
 
 run:
 	./main.out
+
+clean:
+	rm -rf a.out
