@@ -42,6 +42,7 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
   char* sentence = calloc(*data, sizeof(char));
+  printf("%s\n", sentence);
   if( read(y, sentence, *data) == -1){
     printf("Error, %s\n", strerror(errno));
     exit(0);
