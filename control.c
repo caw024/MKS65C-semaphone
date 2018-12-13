@@ -38,7 +38,7 @@ int main(int argc, char * argv[]) {
   }
 
   struct stat st;
-  stat(filename, &st);
+  stat("file.txt", &st);
   int size = st.st_size;
   int y = open("file.txt", O_RDONLY);
   if( y == -1 ){
@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
   char* temp;
-  read(y, sentence, *data - size);
+  read(y, temp, *data - size);
   char* sentence = calloc(*data, sizeof(char));
   if( read(y, sentence, *data) == -1){
     printf("Error, %s\n", strerror(errno));
