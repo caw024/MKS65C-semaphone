@@ -2,10 +2,10 @@ all:  control.c setup.c
 	gcc -o main.out control.c
 	gcc setup.c
 
-	ifeq (setup,$(firstword $(MAKECMDGOALS)))
-	  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-	  $(eval $(RUN_ARGS):;@:)
-	endif
+ifeq (setup,$(firstword $(MAKECMDGOALS)))
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(RUN_ARGS):;@:)
+endif
 
 
 setup: setup.c
@@ -13,7 +13,7 @@ setup: setup.c
 
 .PHONY: setup
 	run : setup
-	@echo setup $(RUN_ARGS)	
+	@echo setup $(RUN_ARGS)
 
 run:
 	./main.out
