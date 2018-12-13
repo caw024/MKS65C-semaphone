@@ -36,19 +36,17 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
 
-  FILE *fp = fopen("file.txt", "r");
-  if(!fp){
+  int y = open("file.txt", O_RDONLY);
+  if( y == -1 ){
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
   char* sentence = calloc(*data, sizeof(char));
-  fseek(fp, *data * -1, SEEK_END);
-  char c[1];
-  while(!(feof(fp))){
-    strcpy(c, fgetc(fp));
-    strcat(sentence, c);
+  if( read(y, sentence, *data) == -1){
+    printf("Error, %s\n", strerror(errno));
+    exit(0);
   }
-  fclose(fp);
+  close(y);
 
   printf("Last line in story: %s\n", sentence);
   printf("Enter the next line for the story\n");
