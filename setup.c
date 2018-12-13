@@ -42,7 +42,7 @@ void rem() {
   if( shmctl(shmid, IPC_RMID, NULL) == -1 ){
     printf("Error, %s\n", strerror(errno));
   }
-  int semid = semget(KEY, 1, 0);
+  int semid = semget(KEY, 1, 0666);
   if( semid == -1 ){
     printf("Error %d: %s\n", errno, strerror(errno));
   }
