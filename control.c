@@ -31,7 +31,7 @@ int main(int argc, char * argv[]) {
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;
   sb.sem_op = -1;
-  semop(semd, &sb, 1);
+  semop(semid, &sb, 1);
 
   int shmid = shmget(123456, 4, 0666);
   int* data = shmat(shmid, 0, 0);
