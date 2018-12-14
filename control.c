@@ -33,7 +33,7 @@ int main(int argc, char * argv[]) {
   sb.sem_op = -1;
   semop(semid, &sb, 1);
 
-  int shmid = shmget(123456, 4, 0666);
+  int shmid = shmget(123456, 4, 0);
   int* data = shmat(shmid, 0, 0);
   if( *data == -1 ){
     printf("Error, %s\n", strerror(errno));
