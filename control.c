@@ -35,7 +35,7 @@ int main(int argc, char * argv[]) {
 
     while( val = semctl(semid, 0, GETVAL, 0) );
   }
-  
+
   struct sembuf sb;
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;
@@ -54,24 +54,27 @@ int main(int argc, char * argv[]) {
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
-  printf("Last line in story: ");
-  fseek(fp, *data * -1, SEEK_END);
+  if(*data == -1){
+    printf("Enter the first line of the story: ");
+  }else{
+    printf("Last line in story: ");
+    fseek(fp, *data * -1, SEEK_END);
 
-  int c;
-  while(1){
-    c = fgetc(fp);
-    if( feof(fp) || c == 10 ){
-      break;
+    int c;
+    while(1){
+      c = fgetc(fp);
+      if( feof(fp) || c == 10 ){
+        break;
+      }
+      printf("%c", c);
     }
-    printf("%c", c);
+    fclose(fp);
+
+
+
+    printf("\nEnter the next line for the story\n");
+    char* sentence = calloc(*data, sizeof(char));
   }
-  fclose(fp);
-
-
-
-  printf("\nEnter the next line for the story\n");
-  char* sentence = calloc(*data, sizeof(char));
-
 
   scanf("%[^\n]", sentence);
 
