@@ -27,6 +27,14 @@ int main(int argc, char * argv[]) {
     printf("error %d: %s\n", errno, strerror(errno));
     exit(0);
   }
+  int val = semctl(semid, 0, GETVAL, 0);
+
+  if( val == 1 ){
+
+    printf("The game is currently being played by another user. Please wait your turn\n");
+
+    while( val = semctl(semid, 0, GETVAL, 0) );
+  }
   struct sembuf sb;
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;
