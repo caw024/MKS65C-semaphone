@@ -73,9 +73,8 @@ int main(int argc, char * argv[]) {
 
 
     printf("\nEnter the next line for the story\n");
-    char* sentence = calloc(*data, sizeof(char));
   }
-
+  char* sentence = calloc(*data, sizeof(char));
   scanf("%[^\n]", sentence);
 
   strcat(sentence, "\n");
