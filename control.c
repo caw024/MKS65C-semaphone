@@ -30,7 +30,7 @@ int main(int argc, char * argv[]) {
   struct sembuf sb;
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;
-  sb.sem_op = -1;
+  sb.sem_op = 1;
   semop(semid, &sb, 1);
 
   int shmid = shmget(123456, 4, 0);
@@ -75,7 +75,7 @@ int main(int argc, char * argv[]) {
   free(sentence);
 
 
-  sb.sem_op = 1;
+  sb.sem_op = -1;
   semop(semid, &sb, 1);
 }  //end of main
 
