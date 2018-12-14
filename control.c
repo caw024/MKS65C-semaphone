@@ -44,10 +44,6 @@ int main(int argc, char * argv[]) {
 
   int shmid = shmget(123456, 4, 0);
   int* data = shmat(shmid, 0, 0);
-  if( *data == -1 ){
-    printf("Error, %s\n", strerror(errno));
-    exit(0);
-  }
 
   FILE *fp = fopen("file.txt", "r");
   if(!fp){
