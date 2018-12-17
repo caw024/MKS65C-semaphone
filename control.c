@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,11 +28,18 @@ int main(int argc, char * argv[]) {
     printf("error %d: %s\n", errno, strerror(errno));
     exit(0);
   }
-  struct sembuf sb;
-  sb.sem_num = 0;
-  sb.sem_flg = SEM_UNDO;
-  sb.sem_op = -1;
-  semop(semid, &sb, 1);
+  int val = semctl(semid, 0, GETVAL, 0);
+
+  if( val == 1 ){
+
+    printf("The game is currently being played by another user. Please wait your turn\n");
+
+    while( val = semctl(semid, 0, GETVAL, 0) );
+  }
+
+  union semun us;
+  us.val = 1;
+  semctl(semid, 0, SETVAL, us);
 
   int shmid = shmget(123456, 4, 0666);
   int* data = shmat(shmid, 0, 0);
@@ -75,6 +83,7 @@ int main(int argc, char * argv[]) {
   free(sentence);
 
 
-  sb.sem_op = 1;
-  semop(semid, &sb, 1);
-} 
+  us.val = 0;
+  semctl(semid, 0, SETVAL, us);
+  return 0;
+}
