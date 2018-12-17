@@ -27,50 +27,43 @@ int main(int argc, char * argv[]) {
     printf("error %d: %s\n", errno, strerror(errno));
     exit(0);
   }
-  int val = semctl(semid, 0, GETVAL, 0);
   struct sembuf sb;
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;
-  sb.sem_op = 0;
-  if( val == 1 ){
-
-    printf("The game is currently being played by another user. Please wait your turn\n");
-    semop(semid, &sb, 0);
-
-  }
-
-  sb.sem_op = 1;
+  sb.sem_op = -1;
   semop(semid, &sb, 1);
 
-  int shmid = shmget(123456, 4, 0);
+  int shmid = shmget(123456, 4, 0666);
   int* data = shmat(shmid, 0, 0);
+  if( *data == -1 ){
+    printf("Error, %s\n", strerror(errno));
+    exit(0);
+  }
 
   FILE *fp = fopen("file.txt", "r");
   if(!fp){
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
-  if(*data == -1){
-    printf("Enter the first line of the story: ");
-  }else{
-    printf("Last line in story: ");
-    fseek(fp, *data * -1, SEEK_END);
+  printf("Last line in story: ");
+  fseek(fp, *data * -1, SEEK_END);
 
-    int c;
-    while(1){
-      c = fgetc(fp);
-      if( feof(fp) || c == 10 ){
-        break;
-      }
-      printf("%c", c);
+  int c;
+  while(1){
+    c = fgetc(fp);
+    if( feof(fp) || c == 10 ){
+      break;
     }
-    fclose(fp);
-
-
-
-    printf("\nEnter the next line for the story\n");
+    printf("%c", c);
   }
+  fclose(fp);
+
+
+
+  printf("\nEnter the next line for the story\n");
   char* sentence = calloc(*data, sizeof(char));
+
+
   scanf("%[^\n]", sentence);
 
   strcat(sentence, "\n");
@@ -82,6 +75,6 @@ int main(int argc, char * argv[]) {
   free(sentence);
 
 
-  sb.sem_op = -1;
+  sb.sem_op = 1;
   semop(semid, &sb, 1);
-}
+} 
