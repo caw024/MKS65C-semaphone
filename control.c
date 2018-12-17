@@ -31,7 +31,7 @@ int main(int argc, char * argv[]) {
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;
   sb.sem_op = 0;
-  if( val == 1 ){
+  if( val >= 1 ){
 
     printf("The game is currently being played by another user. Please wait your turn\n");
     semop(semid, &sb, 0);
