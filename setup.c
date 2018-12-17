@@ -21,7 +21,6 @@ union semun {
 };
 
 void create() {
-
   int shmid = shmget(123456, 4, IPC_CREAT | 0666);
   int* data = shmat(shmid, 0, 0);
   if( *data == -1 ){
@@ -42,16 +41,13 @@ void rem() {
   int shmid = shmget(123456, 4, 0666);
   if( shmctl(shmid, IPC_RMID, NULL) == -1 ){
     printf("Error, %s\n", strerror(errno));
-    exit(1);
   }
   int semid = semget(KEY, 1, 0666);
   if( semid == -1 ){
     printf("Error: %s\n", strerror(errno));
-    exit(1);
   }
   if( semctl(semid, 0, IPC_RMID, 0) == -1){
     printf("Error: %s\n", strerror(errno));
-    exit(1);
   }
   int f = fork();
   if(!f){
