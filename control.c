@@ -27,13 +27,18 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
   int val = semctl(semid, 0, GETVAL, 0);
+  struct sembuf sb;
+  sb.sem_num = 0;
+  sb.sem_flg = SEM_UNDO;
+  sb.sem_op = 0;
   if( val == 1 ){
+
     printf("The game is currently being played by another user. Please wait your turn\n");
-    while( val = semctl(semid, 0, GETVAL, 0) );
+    semop(semid, &sb, 0);
+
   }
-  union semun us;
-  us.val = 1;
-  semctl(semid, 0, SETVAL, us);
+  sb.sem_op = 1;
+  semop(semid, &sb, 1);
 
   int shmid = shmget(123456, 4, 0666);
   int* data = shmat(shmid, 0, 0);
@@ -68,8 +73,10 @@ int main(int argc, char * argv[]) {
   int y = open("file.txt", O_WRONLY | O_APPEND, 0666);
   write(y, sentence, *data);
   close(y);
+  free(sentence);
 
-  us.val = 0;
-  semctl(semid, 0, SETVAL, us);
+  sb.sem_op = -1;
+  semop(semid, &sb, 1);
+
   return 0;
 }
