@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,35 +45,33 @@ int main(int argc, char * argv[]) {
 
   int shmid = shmget(123456, 4, 0);
   int* data = shmat(shmid, 0, 0);
-  if( *data == -1 ){
-    printf("Error, %s\n", strerror(errno));
-    exit(0);
-  }
 
   FILE *fp = fopen("file.txt", "r");
   if(!fp){
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
-  printf("Last line in story: ");
-  fseek(fp, *data * -1, SEEK_END);
+  if(*data == -1){
+    printf("Enter the first line of the story: ");
+  }else{
+    printf("Last line in story: ");
+    fseek(fp, *data * -1, SEEK_END);
 
-  int c;
-  while(1){
-    c = fgetc(fp);
-    if( feof(fp) || c == 10 ){
-      break;
+    int c;
+    while(1){
+      c = fgetc(fp);
+      if( feof(fp) || c == 10 ){
+        break;
+      }
+      printf("%c", c);
     }
-    printf("%c", c);
+    fclose(fp);
+
+
+
+    printf("\nEnter the next line for the story\n");
   }
-  fclose(fp);
-
-
-
-  printf("\nEnter the next line for the story\n");
   char* sentence = calloc(*data, sizeof(char));
-
-
   scanf("%[^\n]", sentence);
 
   strcat(sentence, "\n");
