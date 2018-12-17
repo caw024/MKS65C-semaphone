@@ -9,7 +9,6 @@
 #include <sys/types.h>
 #include <sys/shm.h>
 #include <errno.h>
-//Control
 
 #define KEY 0xBEEFDEAD
 
@@ -27,18 +26,13 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
   int val = semctl(semid, 0, GETVAL, 0);
-  struct sembuf sb;
-  sb.sem_num = 0;
-  sb.sem_flg = SEM_UNDO;
-  sb.sem_op = 0;
-  if( val >= 1 ){
-
+  if( val == 1 ){
     printf("The game is currently being played by another user. Please wait your turn\n");
-    semop(semid, &sb, 0);
-
+    while( val = semctl(semid, 0, GETVAL, 0) );
   }
-  sb.sem_op = 1;
-  semop(semid, &sb, 1);
+  union semun us;
+  us.val = 1;
+  semctl(semid, 0, SETVAL, us);
 
   int shmid = shmget(123456, 4, 0666);
   int* data = shmat(shmid, 0, 0);
@@ -73,10 +67,8 @@ int main(int argc, char * argv[]) {
   int y = open("file.txt", O_WRONLY | O_APPEND, 0666);
   write(y, sentence, *data);
   close(y);
-  free(sentence);
 
-  sb.sem_op = -1;
-  semop(semid, &sb, 1);
-
+  us.val = 0;
+  semctl(semid, 0, SETVAL, us);
   return 0;
 }

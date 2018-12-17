@@ -46,17 +46,6 @@ void rem() {
   if( semid == -1 ){
     printf("Error: %s\n", strerror(errno));
   }
-  int val = semctl(semid, 0, GETVAL, 0);
-  struct sembuf sb;
-  sb.sem_num = 0;
-  sb.sem_flg = SEM_UNDO;
-  sb.sem_op = 0;
-  if( val == 1 ){
-
-    printf("The game is currently being played by another user. Please wait your turn\n");
-    semop(semid, &sb, 0);
-
-  }
   if( semctl(semid, 0, IPC_RMID, 0) == -1){
     printf("Error: %s\n", strerror(errno));
   }
