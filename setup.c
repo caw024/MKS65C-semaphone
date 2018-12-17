@@ -28,7 +28,7 @@ void create() {
     printf("Error, %s\n", strerror(errno));
     exit(0);
   }
-  *data = -1;
+  *data = 0;
   if(shmdt(data) == -1){
     printf("Error, %s\n", strerror(errno));
     exit(0);
